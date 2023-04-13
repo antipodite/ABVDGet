@@ -13,7 +13,7 @@ try:
 except ImportError:  # pragma: no cover
     pass
 
-URL = "http://abvd.shh.mpg.de/utils/save/?type=xml&section=%(db)s&language=%(id)d"
+URL = "http://abvd.eva.mpg.de/utils/save/?type=xml&section=%(db)s&language=%(id)d"
 
 XMLTEMPLATE = """
 <?xml version="1.0" encoding="utf-8"?>
@@ -106,9 +106,9 @@ class Downloader(object):
         return self.url % {'db': self.database, 'id': language_id}
     
     @lru_cache(maxsize=2000)
-    def get(self, language_id):  # pragma: no cover
+    def get(self, language_id, verify=False):  # pragma: no cover
         language_id = self.is_valid_language(language_id)
-        req = requests.get(self.make_url(language_id))
+        req = requests.get(self.make_url(language_id), verify=verify)
         
         # fail on no content
         if len(req.content) == 0 or req.content.strip() == 'null':
